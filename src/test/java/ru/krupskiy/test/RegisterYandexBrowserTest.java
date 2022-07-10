@@ -15,7 +15,7 @@ import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 import static org.junit.Assert.assertTrue;
 
-public class RegisterTestYandexBrowser {
+public class RegisterYandexBrowserTest {
 
     @Before
     public void setup() {

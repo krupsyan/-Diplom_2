@@ -26,12 +26,12 @@ public class LoginPage {
     @FindBy(how = How.XPATH, using = ".//a[(text()[contains(.,'Восстановить пароль')])]")
     private SelenideElement forgetPasswordLink;
 
-    @Step("заполняет поле ввода фамилии")
+    @Step("заполняет поле ввода email")
     public void setEmail(String email) {
         this.EmailField.sendKeys(email);
     }
 
-    @Step("заполняет поле ввода фамилии")
+    @Step("заполняет поле ввода пароля")
     public void setPassword(String password) {
         this.PasswordField.sendKeys(password);
     }

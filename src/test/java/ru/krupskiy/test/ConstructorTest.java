@@ -3,11 +3,15 @@ package ru.krupskiy.test;
 import com.codeborne.selenide.Selenide;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.Test;
+import ru.krupskiy.api.User;
+import ru.krupskiy.api.UserClient;
 import ru.krupskiy.pages.ConstructorPage;
 import ru.krupskiy.pages.LoginPage;
 import ru.krupskiy.pages.MainPage;
 import ru.krupskiy.pages.ProfilePage;
 
+import static org.apache.http.HttpStatus.SC_ACCEPTED;
+import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.Assert.assertTrue;
 
 public class ConstructorTest {
@@ -15,8 +19,18 @@ public class ConstructorTest {
     @Test
     @DisplayName("Успешный переход между вкладками раздела 'Конструктор'. Google_chrome")
     public void enterConstructorViaProfilePage() {
-        String email = "sdvvddva2@krupsyan.ru";
-        String password = "123456";
+        
+            UserClient userClient;
+            userClient = new UserClient();
+            User user = User.getFixed();
+            String accessToken = userClient.createUser(user)
+                    .assertThat()
+                    .statusCode(SC_OK)
+                    .extract()
+                    .path("accessToken");
+
+        String email = user.getEmail();
+        String password = user.getPassword();
         String url = "https://stellarburgers.nomoreparties.site/";
 
         MainPage mainPage = Selenide.open(url, MainPage.class);
@@ -39,5 +53,9 @@ public class ConstructorTest {
 
         constructorPage.clickBunTab();
         assertTrue(constructorPage.areBunsDisplayed());
+
+        
+        userClient.deleteUser(accessToken)
+                .statusCode(SC_ACCEPTED);
     }
 }

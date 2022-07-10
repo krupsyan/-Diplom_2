@@ -3,12 +3,16 @@ package ru.krupskiy.test;
 import io.qameta.allure.junit4.DisplayName;
 import org.junit.After;
 import org.junit.Test;
+import ru.krupskiy.api.User;
+import ru.krupskiy.api.UserClient;
 import ru.krupskiy.pages.ForgetPasswordPage;
 import ru.krupskiy.pages.LoginPage;
 import ru.krupskiy.pages.MainPage;
 import ru.krupskiy.pages.RegistrationPage;
 
 import static com.codeborne.selenide.Selenide.*;
+import static org.apache.http.HttpStatus.SC_ACCEPTED;
+import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.Assert.assertTrue;
 
 public class LoginTest {
@@ -21,8 +25,18 @@ public class LoginTest {
     @Test
     @DisplayName("Успешная авторизация по кнопке 'Войти в аккаунт' на главной")
     public void loginViaLoginButton() {
-        String email = "sdvvddva2@krupsyan.ru";
-        String password = "123456";
+        
+        UserClient userClient;
+        userClient = new UserClient();
+        User user = User.getFixed();
+        String accessToken = userClient.createUser(user)
+                .assertThat()
+                .statusCode(SC_OK)
+                .extract()
+                .path("accessToken");
+
+        String email = user.getEmail();
+        String password = user.getPassword();
         String url = "https://stellarburgers.nomoreparties.site/";
 
         MainPage mainPage = open(url, MainPage.class);
@@ -33,13 +47,27 @@ public class LoginTest {
         loginPage.clickLoginButton();
 
         assertTrue(mainPage.isMakeOrderButtonDisplayed());
+
+        
+        userClient.deleteUser(accessToken)
+                .statusCode(SC_ACCEPTED);
     }
 
     @Test
     @DisplayName("Успешная авторизация через кнопку 'Личный кабинет'. Google_chrome")
     public void loginViaProfile() {
-        String email = "sdvvddva2@krupsyan.ru";
-        String password = "123456";
+        
+        UserClient userClient;
+        userClient = new UserClient();
+        User user = User.getFixed();
+        String accessToken = userClient.createUser(user)
+                .assertThat()
+                .statusCode(SC_OK)
+                .extract()
+                .path("accessToken");
+
+        String email = user.getEmail();
+        String password = user.getPassword();
         String url = "https://stellarburgers.nomoreparties.site/";
 
         MainPage mainPage = open(url, MainPage.class);
@@ -50,13 +78,27 @@ public class LoginTest {
         loginPage.clickLoginButton();
 
         assertTrue(mainPage.isMakeOrderButtonDisplayed());
+
+        
+        userClient.deleteUser(accessToken)
+                .statusCode(SC_ACCEPTED);
     }
 
     @Test
     @DisplayName("Успешная авторизация через кнопку в форме регистрации. Google_chrome")
     public void loginViaRegistrationForm() {
-        String email = "sdvvddva2@krupsyan.ru";
-        String password = "123456";
+        
+        UserClient userClient;
+        userClient = new UserClient();
+        User user = User.getFixed();
+        String accessToken = userClient.createUser(user)
+                .assertThat()
+                .statusCode(SC_OK)
+                .extract()
+                .path("accessToken");
+
+        String email = user.getEmail();
+        String password = user.getPassword();
         String url = "https://stellarburgers.nomoreparties.site/";
 
         MainPage mainPage = open(url, MainPage.class);
@@ -70,13 +112,27 @@ public class LoginTest {
         loginPage.clickLoginButton();
 
         assertTrue(mainPage.isMakeOrderButtonDisplayed());
-    }
+
+        
+        userClient.deleteUser(accessToken)
+        .statusCode(SC_ACCEPTED);
+        }
 
     @Test
     @DisplayName("Успешная авторизация через кнопку в форме восстановления пароля. Google_chrome")
     public void loginViaForgetPassword() {
-        String email = "sdvvddva2@krupsyan.ru";
-        String password = "123456";
+        
+        UserClient userClient;
+        userClient = new UserClient();
+        User user = User.getFixed();
+        String accessToken = userClient.createUser(user)
+                .assertThat()
+                .statusCode(SC_OK)
+                .extract()
+                .path("accessToken");
+
+        String email = user.getEmail();
+        String password = user.getPassword();
         String url = "https://stellarburgers.nomoreparties.site/";
 
         MainPage mainPage = open(url, MainPage.class);
@@ -90,5 +146,9 @@ public class LoginTest {
         loginPage.clickLoginButton();
 
         assertTrue(mainPage.isMakeOrderButtonDisplayed());
+
+        
+        userClient.deleteUser(accessToken)
+                .statusCode(SC_ACCEPTED);
     }
 }

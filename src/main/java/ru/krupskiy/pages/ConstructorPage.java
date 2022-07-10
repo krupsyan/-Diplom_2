@@ -7,7 +7,7 @@ import io.qameta.allure.Step;
 
 public class ConstructorPage {
 
-    //локатор кнопки "Профиль"
+    //локатор кнопки "Соберите бургер"
     @FindBy(how = How.XPATH, using = ".//h1[(text()[contains(.,'Соберите бургер')])]")
     private SelenideElement collectBurgerText;
     //локатор вкладки "Соусы"
@@ -19,12 +19,12 @@ public class ConstructorPage {
     //локатор вкладки "Булки"
     @FindBy(how = How.XPATH, using = ".//span[(text()[contains(.,'Булки')])]")
     private SelenideElement bunTab;
-    //локатор раздела "Соусы" в меню
-    @FindBy(how = How.XPATH, using = ".//h2[(text()[contains(.,'Начинки')])]")
-    private SelenideElement sauceMenu;
     //локатор раздела "Начинки" в меню
-    @FindBy(how = How.XPATH, using = ".//h2[(text()[contains(.,'Соусы')])]")
+    @FindBy(how = How.XPATH, using = ".//h2[(text()[contains(.,'Начинки')])]")
     private SelenideElement ingredientMenu;
+    //локатор раздела "Соусы" в меню
+    @FindBy(how = How.XPATH, using = ".//h2[(text()[contains(.,'Соусы')])]")
+    private SelenideElement sauceMenu;
     //локатор раздела "Булки" в меню
     @FindBy(how = How.XPATH, using = ".//h2[(text()[contains(.,'Булки')])]")
     private SelenideElement bunMenu;

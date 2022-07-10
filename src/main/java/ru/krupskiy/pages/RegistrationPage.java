@@ -8,7 +8,6 @@ import io.qameta.allure.Step;
 public class RegistrationPage {
 
     //локатор поля ввода имени
-//    @FindBy(how = How.XPATH, using = ".//fieldset[@class='Auth_form__3qKeq mb-20'/.input[@name='name']")
     @FindBy(how = How.XPATH, using = ".//input[@name='name']")
     private SelenideElement NameField;
     //локатор поля ввода email

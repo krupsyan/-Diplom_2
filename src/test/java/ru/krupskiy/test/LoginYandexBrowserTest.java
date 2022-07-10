@@ -6,6 +6,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
+import ru.krupskiy.api.User;
+import ru.krupskiy.api.UserClient;
 import ru.krupskiy.pages.ForgetPasswordPage;
 import ru.krupskiy.pages.LoginPage;
 import ru.krupskiy.pages.MainPage;
@@ -13,9 +15,11 @@ import ru.krupskiy.pages.RegistrationPage;
 
 import static com.codeborne.selenide.Selenide.*;
 import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
+import static org.apache.http.HttpStatus.SC_ACCEPTED;
+import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.Assert.assertTrue;
 
-public class LoginTestYandexBrowser {
+public class LoginYandexBrowserTest {
 
     @Before
     public void setup() {
@@ -64,8 +68,18 @@ public class LoginTestYandexBrowser {
     @Test
     @DisplayName("Успешная авторизация через кнопку в форме регистрации. Yandex_browser")
     public void loginViaRegistrationForm() {
-        String email = "sdvvddva2@krupsyan.ru";
-        String password = "123456";
+        
+        UserClient userClient;
+        userClient = new UserClient();
+        User user = User.getFixed();
+        String accessToken = userClient.createUser(user)
+                .assertThat()
+                .statusCode(SC_OK)
+                .extract()
+                .path("accessToken");
+
+        String email = user.getEmail();
+        String password = user.getPassword();
         String url = "https://stellarburgers.nomoreparties.site/";
 
         MainPage mainPage = open(url, MainPage.class);
@@ -79,13 +93,27 @@ public class LoginTestYandexBrowser {
         loginPage.clickLoginButton();
 
         assertTrue(mainPage.isMakeOrderButtonDisplayed());
+
+        
+        userClient.deleteUser(accessToken)
+                .statusCode(SC_ACCEPTED);
     }
 
     @Test
     @DisplayName("Успешная авторизация через кнопку в форме восстановления пароля. Yandex_browser")
     public void loginViaForgetPassword() {
-        String email = "sdvvddva2@krupsyan.ru";
-        String password = "123456";
+        
+        UserClient userClient;
+        userClient = new UserClient();
+        User user = User.getFixed();
+        String accessToken = userClient.createUser(user)
+                .assertThat()
+                .statusCode(SC_OK)
+                .extract()
+                .path("accessToken");
+
+        String email = user.getEmail();
+        String password = user.getPassword();
         String url = "https://stellarburgers.nomoreparties.site/";
 
         MainPage mainPage = open(url, MainPage.class);
@@ -99,5 +127,9 @@ public class LoginTestYandexBrowser {
         loginPage.clickLoginButton();
 
         assertTrue(mainPage.isMakeOrderButtonDisplayed());
+
+        
+        userClient.deleteUser(accessToken)
+                .statusCode(SC_ACCEPTED);
     }
 }
