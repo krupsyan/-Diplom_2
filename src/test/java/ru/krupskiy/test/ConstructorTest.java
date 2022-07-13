@@ -13,6 +13,7 @@ import ru.krupskiy.pages.ProfilePage;
 import static org.apache.http.HttpStatus.SC_ACCEPTED;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.Assert.assertTrue;
+import static ru.krupskiy.pages.MainPage.MAIN_URL;
 
 public class ConstructorTest {
 
@@ -31,14 +32,11 @@ public class ConstructorTest {
 
         String email = user.getEmail();
         String password = user.getPassword();
-        String url = "https://stellarburgers.nomoreparties.site/";
 
-        MainPage mainPage = Selenide.open(url, MainPage.class);
+        MainPage mainPage = Selenide.open(MAIN_URL, MainPage.class);
         mainPage.clickLoginButton();
         LoginPage loginPage = Selenide.page(LoginPage.class);
-        loginPage.setEmail(email);
-        loginPage.setPassword(password);
-        loginPage.clickLoginButton();
+        loginPage.authorize(email, password);
         mainPage.clickProfileButton();
 
         ProfilePage profilePage = Selenide.page(ProfilePage.class);
@@ -46,15 +44,14 @@ public class ConstructorTest {
         ConstructorPage constructorPage = Selenide.page(ConstructorPage.class);
 
         constructorPage.clickSauceTab();
-        assertTrue(constructorPage.areSaucesDisplayed());
+        assertTrue(constructorPage.isSauceTabActive());
 
         constructorPage.clickIngredientTab();
-        assertTrue(constructorPage.areIngredientsDisplayed());
+        assertTrue(constructorPage.isIngredientTabActive());
 
         constructorPage.clickBunTab();
-        assertTrue(constructorPage.areBunsDisplayed());
+        assertTrue(constructorPage.isBunTabActive());
 
-        
         userClient.deleteUser(accessToken)
                 .statusCode(SC_ACCEPTED);
     }

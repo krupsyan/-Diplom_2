@@ -12,6 +12,6 @@ public class ForgetPasswordPage {
 
     @Step("нажатие на ссылку 'Войти'")
     public void clickLoginLink() {
-        this.loginLink.click();
+        loginLink.click();
     }
 }

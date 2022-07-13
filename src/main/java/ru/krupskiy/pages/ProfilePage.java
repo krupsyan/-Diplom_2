@@ -21,22 +21,26 @@ public class ProfilePage {
 
     @Step("нажатие на кнопку 'Профиль'")
     public void clickProfileButton() {
-        this.profileButton.click();
+        profileButton.click();
     }
+
     @Step("нажатие на кнопку 'Конструктор'")
     public void clickConstructorButton() {
-        this.constructorButton.click();
+        constructorButton.click();
     }
+
     @Step("нажатие на логотип Stellar Burgers'")
     public void clickOnLogoButton() {
-        this.logo.click();
+        logo.click();
     }
+
     @Step("нажатие на кнопку 'Выход'")
     public void clickOnExitButton() {
-        this.exitButton.click();
+        exitButton.click();
     }
+
     @Step("возвращает true, если отображается текст 'Профиль' на странице личного кабинета")
     public boolean isProfileTextDisplayed() {
-        return this.profileButton.isDisplayed();
+        return profileButton.isDisplayed();
     }
 }

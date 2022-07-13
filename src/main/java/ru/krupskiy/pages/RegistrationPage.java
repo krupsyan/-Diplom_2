@@ -9,13 +9,13 @@ public class RegistrationPage {
 
     //локатор поля ввода имени
     @FindBy(how = How.XPATH, using = ".//input[@name='name']")
-    private SelenideElement NameField;
+    private SelenideElement nameField;
     //локатор поля ввода email
     @FindBy(how = How.XPATH, using = ".//input[@value='']")
-    private SelenideElement EmailField;
+    private SelenideElement emailField;
     //локатор поля ввода пароля
     @FindBy(how = How.XPATH, using = ".//input[@name='Пароль']")
-    private SelenideElement PasswordField;
+    private SelenideElement passwordField;
     //Локатор кнопки "Зарегистрироваться"
     @FindBy(how = How.XPATH, using = ".//button[(text()[contains(.,'Зарегистрироваться')])]")
     private SelenideElement registerButton;
@@ -29,34 +29,34 @@ public class RegistrationPage {
     @Step("заполняет поле ввода имени")
     public void setName(String name) {
 
-        this.NameField.sendKeys(name);
+        nameField.sendKeys(name);
     }
 
     @Step("заполняет поле ввода email")
     public void setEmail(String email) {
-        this.EmailField.sendKeys(email);
+        emailField.sendKeys(email);
     }
 
     @Step("заполняет поле ввода пароля")
     public void setPassword(String password) {
 
-        this.PasswordField.sendKeys(password);
+        passwordField.sendKeys(password);
     }
 
     @Step("нажатие на кнопку 'Зарегистрироваться'")
     public void clickRegisterButton() {
 
-        this.registerButton.click();
+        registerButton.click();
     }
     @Step("нажатие на ссылку 'Войти'")
     public void clickLoginLink() {
 
-        this.loginLink.click();
+        loginLink.click();
     }
 
     @Step("возвращает true, если отображается сообщение об ошибке 'Некорректный пароль'")
     public boolean isIncorrectPasswordMessageDisplayed() {
-        return this.incorrectPasswordMessage.isDisplayed();
+        return incorrectPasswordMessage.isDisplayed();
     }
 
 

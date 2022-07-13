@@ -18,155 +18,83 @@ import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 import static org.apache.http.HttpStatus.SC_ACCEPTED;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.Assert.assertTrue;
+import static ru.krupskiy.pages.MainPage.MAIN_URL;
 
 public class ProfileYandexBrowserTest {
 
+    UserClient userClient;
+    User user;
+    String accessToken;
+    String email;
+    String password;
+    MainPage mainPage;
+    LoginPage loginPage;
+    ProfilePage profilePage;
     @Before
     public void setup() {
-        System.setProperty("webdriver.chrome.driver","/home/akrupskiy/IdeaProjects/Diplom_3/yandexdriver-22.5.0.1879-linux/yandexdriver"); WebDriver driver =new ChromeDriver(); setWebDriver(driver);
+        System.setProperty("webdriver.chrome.driver","/home/akrupskiy/IdeaProjects/Diplom_3/yandexdriver-22.5.0.1879-linux/yandexdriver");
+        WebDriver driver = new ChromeDriver();
+        setWebDriver(driver);
+
+        userClient = new UserClient();
+        user = User.getFixed();
+        accessToken = userClient.createUser(user)
+                .assertThat()
+                .statusCode(SC_OK)
+                .extract()
+                .path("accessToken");
+
+        email = user.getEmail();
+        password = user.getPassword();
+
+        mainPage = open(MAIN_URL, MainPage.class);
+        mainPage.clickLoginButton();
+        loginPage = page(LoginPage.class);
+        loginPage.authorize(email, password);
+        mainPage.clickProfileButton();
+
+        profilePage = page(ProfilePage.class);
     }
 
     @After
     public void tearDown() {
         close();
+
+        userClient.deleteUser(accessToken)
+                .statusCode(SC_ACCEPTED);
     };
 
     @Test
     @DisplayName("Успешный переход по клику на 'Личный кабинет'. Yandex_browser")
     public void enterProfilePage() {
-        
-        UserClient userClient;
-        userClient = new UserClient();
-        User user = User.getFixed();
-        String accessToken = userClient.createUser(user)
-                .assertThat()
-                .statusCode(SC_OK)
-                .extract()
-                .path("accessToken");
-
-        String email = user.getEmail();
-        String password = user.getPassword();
-        String url = "https://stellarburgers.nomoreparties.site/";
-
-        MainPage mainPage = open(url, MainPage.class);
-        mainPage.clickLoginButton();
-        LoginPage loginPage = page(LoginPage.class);
-        loginPage.setEmail(email);
-        loginPage.setPassword(password);
-        loginPage.clickLoginButton();
-        mainPage.clickProfileButton();
-
-        ProfilePage profilePage = page(ProfilePage.class);
         profilePage.clickProfileButton();
-        assertTrue(profilePage.isProfileTextDisplayed());
 
-        
-        userClient.deleteUser(accessToken)
-                .statusCode(SC_ACCEPTED);
+        assertTrue(profilePage.isProfileTextDisplayed());
     }
 
     @Test
     @DisplayName("Успешный переход по клику на «Конструктор» из личного кабинета. Yandex_browser")
     public void enterConstructorViaProfilePage() {
-        
-        UserClient userClient;
-        userClient = new UserClient();
-        User user = User.getFixed();
-        String accessToken = userClient.createUser(user)
-                .assertThat()
-                .statusCode(SC_OK)
-                .extract()
-                .path("accessToken");
-
-        String email = user.getEmail();
-        String password = user.getPassword();
-        String url = "https://stellarburgers.nomoreparties.site/";
-
-        MainPage mainPage = open(url, MainPage.class);
-        mainPage.clickLoginButton();
-        LoginPage loginPage = page(LoginPage.class);
-        loginPage.setEmail(email);
-        loginPage.setPassword(password);
-        loginPage.clickLoginButton();
-        mainPage.clickProfileButton();
-
-        ProfilePage profilePage = page(ProfilePage.class);
         profilePage.clickConstructorButton();
         ConstructorPage constructorPage = page(ConstructorPage.class);
-        assertTrue(constructorPage.isCollectBurgerTextDisplayed());
 
-        
-        userClient.deleteUser(accessToken)
-                .statusCode(SC_ACCEPTED);
+        assertTrue(constructorPage.isCollectBurgerTextDisplayed());
     }
 
     @Test
     @DisplayName("Успешный переход на главную по клику на логотип Stellar Burgers из личного кабинета. Yandex_browser")
     public void clickOnLogoViaProfilePage() {
-        
-        UserClient userClient;
-        userClient = new UserClient();
-        User user = User.getFixed();
-        String accessToken = userClient.createUser(user)
-                .assertThat()
-                .statusCode(SC_OK)
-                .extract()
-                .path("accessToken");
-
-        String email = user.getEmail();
-        String password = user.getPassword();
-        String url = "https://stellarburgers.nomoreparties.site/";
-
-        MainPage mainPage = open(url, MainPage.class);
-        mainPage.clickLoginButton();
-        LoginPage loginPage = page(LoginPage.class);
-        loginPage.setEmail(email);
-        loginPage.setPassword(password);
-        loginPage.clickLoginButton();
-        mainPage.clickProfileButton();
-
-        ProfilePage profilePage = page(ProfilePage.class);
         profilePage.clickOnLogoButton();
-        assertTrue(mainPage.isMakeOrderButtonDisplayed());
 
-        
-        userClient.deleteUser(accessToken)
-                .statusCode(SC_ACCEPTED);
+        assertTrue(mainPage.isMakeOrderButtonDisplayed());
     }
 
     @Test
     @DisplayName("Успешный выход из аккаунта. Yandex_browser")
     public void exitProfile() {
-        
-        UserClient userClient;
-        userClient = new UserClient();
-        User user = User.getFixed();
-        String accessToken = userClient.createUser(user)
-                .assertThat()
-                .statusCode(SC_OK)
-                .extract()
-                .path("accessToken");
-
-        String email = user.getEmail();
-        String password = user.getPassword();
-        String url = "https://stellarburgers.nomoreparties.site/";
-
-        MainPage mainPage = open(url, MainPage.class);
-        mainPage.clickLoginButton();
-        LoginPage loginPage = page(LoginPage.class);
-        loginPage.setEmail(email);
-        loginPage.setPassword(password);
-        loginPage.clickLoginButton();
-        mainPage.clickProfileButton();
-
-        ProfilePage profilePage = page(ProfilePage.class);
         profilePage.clickOnExitButton();
-
         loginPage.clickLoginButton();
-        assertTrue(loginPage.isLoginButtonDisplayed());
 
-        
-        userClient.deleteUser(accessToken)
-                .statusCode(SC_ACCEPTED);
+        assertTrue(loginPage.isLoginButtonDisplayed());
     }
 }

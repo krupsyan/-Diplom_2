@@ -9,10 +9,10 @@ public class LoginPage {
 
     //локатор поля ввода email
     @FindBy(how = How.XPATH, using = ".//input[@name='name']")
-    private SelenideElement EmailField;
+    private SelenideElement emailField;
     //локатор поля ввода пароля
     @FindBy(how = How.XPATH, using = ".//input[@name='Пароль']")
-    private SelenideElement PasswordField;
+    private SelenideElement passwordField;
     //локатор ссылки "Зарегистрироваться"
     @FindBy(how = How.XPATH, using = ".//a[(text()[contains(.,'Зарегистрироваться')])]")
     private SelenideElement registerLink;
@@ -28,36 +28,43 @@ public class LoginPage {
 
     @Step("заполняет поле ввода email")
     public void setEmail(String email) {
-        this.EmailField.sendKeys(email);
+        emailField.sendKeys(email);
     }
 
     @Step("заполняет поле ввода пароля")
     public void setPassword(String password) {
-        this.PasswordField.sendKeys(password);
+        passwordField.sendKeys(password);
     }
 
     @Step("нажатие на ссылку 'Зарегистрироваться'")
     public void clickRegisterLink() {
-        this.registerLink.click();
+        registerLink.click();
     }
 
     @Step("нажатие на кнопку 'Войти'")
     public void clickLoginButton() {
-        this.loginButton.click();
+        loginButton.click();
     }
 
     @Step("нажатие на ссылку 'Восстановить пароль'")
     public void clickForgetPasswordLink() {
-        this.forgetPasswordLink.click();
+        forgetPasswordLink.click();
     }
 
     @Step("возвращает true, если отображается кнопка 'Войти' на странице авторизации")
     public boolean isLoginButtonDisplayed() {
-        return this.loginButton.isDisplayed();
+        return loginButton.isDisplayed();
     }
 
     @Step("возвращает true, если отображается форма авторизации")
     public boolean isLoginFormDisplayed() {
-        return this.loginForm.isDisplayed();
+        return loginForm.isDisplayed();
+    }
+
+    @Step("авторизация")
+    public void authorize(String email, String password) {
+        setEmail(email);
+        setPassword(password);
+        clickLoginButton();
     }
 }

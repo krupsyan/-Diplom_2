@@ -11,13 +11,13 @@ public class ConstructorPage {
     @FindBy(how = How.XPATH, using = ".//h1[(text()[contains(.,'Соберите бургер')])]")
     private SelenideElement collectBurgerText;
     //локатор вкладки "Соусы"
-    @FindBy(how = How.XPATH, using = ".//span[(text()[contains(.,'Соусы')])]")
+    @FindBy(how = How.XPATH, using = ".//span[(text()[contains(.,'Соусы')])]/parent::*")
     private SelenideElement sauceTab;
     //локатор вкладки "Начинки"
-    @FindBy(how = How.XPATH, using = ".//span[(text()[contains(.,'Начинки')])]")
+    @FindBy(how = How.XPATH, using = ".//span[(text()[contains(.,'Начинки')])]/parent::*")
     private SelenideElement ingredientTab;
     //локатор вкладки "Булки"
-    @FindBy(how = How.XPATH, using = ".//span[(text()[contains(.,'Булки')])]")
+    @FindBy(how = How.XPATH, using = ".//span[(text()[contains(.,'Булки')])]/parent::*")
     private SelenideElement bunTab;
     //локатор раздела "Начинки" в меню
     @FindBy(how = How.XPATH, using = ".//h2[(text()[contains(.,'Начинки')])]")
@@ -31,38 +31,34 @@ public class ConstructorPage {
 
     @Step("нажатие на вкладку 'Соусы'")
     public void clickSauceTab() {
-        this.sauceTab.click();
+        sauceTab.click();
     }
 
     @Step("нажатие на вкладку 'Начинки'")
     public void clickIngredientTab() {
-        this.ingredientTab.click();
+        ingredientTab.click();
     }
 
     @Step("нажатие на вкладку 'Булки'")
     public void clickBunTab() {
-        this.bunTab.click();
+        bunTab.click();
     }
 
     @Step("возвращает true, если отображается текст 'Соберите бургер' на странице личного кабинета")
     public boolean isCollectBurgerTextDisplayed() {
-        return this.collectBurgerText.isDisplayed();
+        return collectBurgerText.isDisplayed();
     }
 
-    @Step("возвращает true, если отображается содержимое вкладки 'Соусы'")
-    public boolean areSaucesDisplayed() {
-        return this.sauceMenu.isDisplayed();
+    @Step("возвращает true, если вкладка меню 'Соусы' активна")
+    public boolean isSauceTabActive() {
+        return sauceTab.getAttribute("class").contains("tab_tab__1SPyG tab_tab_type_current__2BEPc pt-4 pr-10 pb-4 pl-10 noselect");
     }
-
-    @Step("возвращает true, если отображается содержимое вкладки 'Начинки'")
-    public boolean areIngredientsDisplayed() {
-        return this.ingredientMenu.isDisplayed();
+    @Step("возвращает true, если вкладка меню 'Соусы' активна")
+    public boolean isIngredientTabActive() {
+        return ingredientTab.getAttribute("class").contains("tab_tab__1SPyG tab_tab_type_current__2BEPc pt-4 pr-10 pb-4 pl-10 noselect");
     }
-
-    @Step("возвращает true, если отображается содержимое вкладки 'Булочки'")
-    public boolean areBunsDisplayed() {
-        return this.bunMenu.isDisplayed();
+    @Step("возвращает true, если вкладка меню 'Соусы' активна")
+    public boolean isBunTabActive() {
+        return bunTab.getAttribute("class").contains("tab_tab__1SPyG tab_tab_type_current__2BEPc pt-4 pr-10 pb-4 pl-10 noselect");
     }
-
-
 }

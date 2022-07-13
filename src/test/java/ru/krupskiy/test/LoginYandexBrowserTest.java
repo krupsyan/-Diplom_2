@@ -18,32 +18,50 @@ import static com.codeborne.selenide.WebDriverRunner.setWebDriver;
 import static org.apache.http.HttpStatus.SC_ACCEPTED;
 import static org.apache.http.HttpStatus.SC_OK;
 import static org.junit.Assert.assertTrue;
+import static ru.krupskiy.pages.MainPage.MAIN_URL;
 
 public class LoginYandexBrowserTest {
 
+    UserClient userClient;
+    User user;
+    String accessToken;
+    String email;
+    String password;
+    MainPage mainPage;
     @Before
     public void setup() {
-        System.setProperty("webdriver.chrome.driver","/home/akrupskiy/IdeaProjects/Diplom_3/yandexdriver-22.5.0.1879-linux/yandexdriver"); WebDriver driver =new ChromeDriver(); setWebDriver(driver);
+        System.setProperty("webdriver.chrome.driver","/home/akrupskiy/IdeaProjects/Diplom_3/yandexdriver-22.5.0.1879-linux/yandexdriver");
+        WebDriver driver = new ChromeDriver();
+        setWebDriver(driver);
+
+        userClient = new UserClient();
+        user = User.getFixed();
+        accessToken = userClient.createUser(user)
+                .assertThat()
+                .statusCode(SC_OK)
+                .extract()
+                .path("accessToken");
+
+        email = user.getEmail();
+        password = user.getPassword();
+
+        mainPage = open(MAIN_URL, MainPage.class);
     }
 
     @After
     public void tearDown() {
         close();
+
+        userClient.deleteUser(accessToken)
+                .statusCode(SC_ACCEPTED);
     };
 
     @Test
     @DisplayName("Успешная авторизация по кнопке 'Войти в аккаунт' на главной. Yandex_browser")
     public void loginViaLoginButton() {
-        String email = "sdvvddva2@krupsyan.ru";
-        String password = "123456";
-        String url = "https://stellarburgers.nomoreparties.site/";
-
-        MainPage mainPage = open(url, MainPage.class);
         mainPage.clickLoginButton();
         LoginPage loginPage = page(LoginPage.class);
-        loginPage.setEmail(email);
-        loginPage.setPassword(password);
-        loginPage.clickLoginButton();
+        loginPage.authorize(email, password);
 
         assertTrue(mainPage.isMakeOrderButtonDisplayed());
     }
@@ -51,16 +69,9 @@ public class LoginYandexBrowserTest {
     @Test
     @DisplayName("Успешная авторизация через кнопку 'Личный кабинет'. Yandex_browser")
     public void loginViaProfile() {
-        String email = "sdvvddva2@krupsyan.ru";
-        String password = "123456";
-        String url = "https://stellarburgers.nomoreparties.site/";
-
-        MainPage mainPage = open(url, MainPage.class);
         mainPage.clickProfileButton();
         LoginPage loginPage = page(LoginPage.class);
-        loginPage.setEmail(email);
-        loginPage.setPassword(password);
-        loginPage.clickLoginButton();
+        loginPage.authorize(email, password);
 
         assertTrue(mainPage.isMakeOrderButtonDisplayed());
     }
@@ -68,68 +79,26 @@ public class LoginYandexBrowserTest {
     @Test
     @DisplayName("Успешная авторизация через кнопку в форме регистрации. Yandex_browser")
     public void loginViaRegistrationForm() {
-        
-        UserClient userClient;
-        userClient = new UserClient();
-        User user = User.getFixed();
-        String accessToken = userClient.createUser(user)
-                .assertThat()
-                .statusCode(SC_OK)
-                .extract()
-                .path("accessToken");
-
-        String email = user.getEmail();
-        String password = user.getPassword();
-        String url = "https://stellarburgers.nomoreparties.site/";
-
-        MainPage mainPage = open(url, MainPage.class);
         mainPage.clickLoginButton();
         LoginPage loginPage = page(LoginPage.class);
         loginPage.clickRegisterLink();
         RegistrationPage registrationPage = page(RegistrationPage.class);
         registrationPage.clickLoginLink();
-        loginPage.setEmail(email);
-        loginPage.setPassword(password);
-        loginPage.clickLoginButton();
+        loginPage.authorize(email, password);
 
         assertTrue(mainPage.isMakeOrderButtonDisplayed());
-
-        
-        userClient.deleteUser(accessToken)
-                .statusCode(SC_ACCEPTED);
     }
 
     @Test
     @DisplayName("Успешная авторизация через кнопку в форме восстановления пароля. Yandex_browser")
     public void loginViaForgetPassword() {
-        
-        UserClient userClient;
-        userClient = new UserClient();
-        User user = User.getFixed();
-        String accessToken = userClient.createUser(user)
-                .assertThat()
-                .statusCode(SC_OK)
-                .extract()
-                .path("accessToken");
-
-        String email = user.getEmail();
-        String password = user.getPassword();
-        String url = "https://stellarburgers.nomoreparties.site/";
-
-        MainPage mainPage = open(url, MainPage.class);
         mainPage.clickLoginButton();
         LoginPage loginPage = page(LoginPage.class);
         loginPage.clickForgetPasswordLink();
         ForgetPasswordPage forgetPasswordPage = page(ForgetPasswordPage.class);
         forgetPasswordPage.clickLoginLink();
-        loginPage.setEmail(email);
-        loginPage.setPassword(password);
-        loginPage.clickLoginButton();
+        loginPage.authorize(email, password);
 
         assertTrue(mainPage.isMakeOrderButtonDisplayed());
-
-        
-        userClient.deleteUser(accessToken)
-                .statusCode(SC_ACCEPTED);
     }
 }

@@ -28,6 +28,15 @@ public class UserClient {
                 .then().log().all();
     }
 
+    @Step("Login as a user")
+    public ValidatableResponse login(UserCredentials creds) {
+        return reqSpec
+                .body(creds)
+                .when()
+                .post(LOGIN)
+                .then().log().all();
+    }
+
     @Step("Удаление пользователя")
     public ValidatableResponse deleteUser(String accessToken) {
         return reqSpec
