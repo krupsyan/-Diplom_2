@@ -19,15 +19,6 @@ public class ConstructorPage {
     //локатор вкладки "Булки"
     @FindBy(how = How.XPATH, using = ".//span[(text()[contains(.,'Булки')])]/parent::*")
     private SelenideElement bunTab;
-    //локатор раздела "Начинки" в меню
-    @FindBy(how = How.XPATH, using = ".//h2[(text()[contains(.,'Начинки')])]")
-    private SelenideElement ingredientMenu;
-    //локатор раздела "Соусы" в меню
-    @FindBy(how = How.XPATH, using = ".//h2[(text()[contains(.,'Соусы')])]")
-    private SelenideElement sauceMenu;
-    //локатор раздела "Булки" в меню
-    @FindBy(how = How.XPATH, using = ".//h2[(text()[contains(.,'Булки')])]")
-    private SelenideElement bunMenu;
 
     @Step("нажатие на вкладку 'Соусы'")
     public void clickSauceTab() {
